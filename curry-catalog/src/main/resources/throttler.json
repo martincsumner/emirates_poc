@@ -1,0 +1,881 @@
+{
+  "kind": "List",
+  "apiVersion": "v1",
+  "metadata": {},
+  "items": [
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "throttler",
+        "generation": 1,
+        "creationTimestamp": null,
+        "labels": {
+          "app": "throttler"
+        },
+        "annotations": {
+          "openshift.io/generated-by": "OpenShiftNewApp"
+        }
+      },
+      "spec": {
+        "strategy": {
+          "type": "Rolling",
+          "rollingParams": {
+            "updatePeriodSeconds": 1,
+            "intervalSeconds": 1,
+            "timeoutSeconds": 600,
+            "maxUnavailable": "25%",
+            "maxSurge": "25%"
+          },
+          "resources": {},
+          "activeDeadlineSeconds": 21600
+        },
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "type": "ImageChange",
+            "imageChangeParams": {
+              "automatic": true,
+              "containerNames": [
+                "throttler"
+              ],
+              "from": {
+                "kind": "ImageStreamTag",
+                "namespace": "throttler",
+                "name": "throttler:latest"
+              }
+            }
+          }
+        ],
+        "replicas": 1,
+        "revisionHistoryLimit": 10,
+        "test": false,
+        "selector": {
+          "app": "throttler",
+          "deploymentconfig": "throttler"
+        },
+        "template": {
+          "metadata": {
+            "creationTimestamp": null,
+            "labels": {
+              "app": "throttler",
+              "deploymentconfig": "throttler"
+            },
+            "annotations": {
+              "openshift.io/generated-by": "OpenShiftNewApp"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "name": "throttler",
+                "image": "docker-registry.default.svc:5000/throttler/throttler@sha256:7341f45eb1fe2d040ce5fb9e71e017e7c8c1ca38c532021b0beac80ffb0bb15d",
+                "ports": [
+                  {
+                    "containerPort": 8778,
+                    "protocol": "TCP"
+                  },
+                  {
+                    "containerPort": 9779,
+                    "protocol": "TCP"
+                  }
+                ],
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "imagePullPolicy": "Always"
+              }
+            ],
+            "restartPolicy": "Always",
+            "terminationGracePeriodSeconds": 30,
+            "dnsPolicy": "ClusterFirst",
+            "securityContext": {},
+            "schedulerName": "default-scheduler"
+          }
+        }
+      },
+      "status": {
+        "latestVersion": 0,
+        "observedGeneration": 0,
+        "replicas": 0,
+        "updatedReplicas": 0,
+        "availableReplicas": 0,
+        "unavailableReplicas": 0
+      }
+    },
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "throttler",
+        "creationTimestamp": null,
+        "labels": {
+          "app": "throttler"
+        },
+        "annotations": {
+          "openshift.io/generated-by": "OpenShiftNewApp"
+        }
+      },
+      "spec": {
+        "triggers": [
+          {
+            "type": "GitHub",
+            "github": {
+              "secret": "_nz4896S4ExwrkVYXapC"
+            }
+          },
+          {
+            "type": "Generic",
+            "generic": {
+              "secret": "Y6U82Jn8u9s2yBiFjBPP"
+            }
+          },
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "type": "ImageChange",
+            "imageChange": {}
+          }
+        ],
+        "runPolicy": "Serial",
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "https://github.com/martincsumner/throttler.git"
+          }
+        },
+        "strategy": {
+          "type": "Source",
+          "sourceStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "throttler",
+              "name": "fuse-java-openshift:latest"
+            }
+          }
+        },
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "throttler:latest"
+          }
+        },
+        "resources": {},
+        "postCommit": {},
+        "nodeSelector": null,
+        "successfulBuildsHistoryLimit": 5,
+        "failedBuildsHistoryLimit": 5
+      },
+      "status": {
+        "lastVersion": 0
+      }
+    },
+    {
+      "kind": "Build",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "throttler-1",
+        "creationTimestamp": null,
+        "labels": {
+          "app": "throttler",
+          "buildconfig": "throttler",
+          "openshift.io/build-config.name": "throttler",
+          "openshift.io/build.start-policy": "Serial"
+        },
+        "annotations": {
+          "openshift.io/build-config.name": "throttler",
+          "openshift.io/build.number": "1",
+          "openshift.io/build.pod-name": "throttler-1-build"
+        },
+        "ownerReferences": [
+          {
+            "apiVersion": "build.openshift.io/v1",
+            "kind": "BuildConfig",
+            "name": "throttler",
+            "uid": "0317c8a0-8b4f-11e8-bf90-5254007646f1",
+            "controller": true
+          }
+        ]
+      },
+      "spec": {
+        "serviceAccount": "builder",
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "https://github.com/martincsumner/throttler.git"
+          }
+        },
+        "revision": {
+          "type": "Git",
+          "git": {
+            "commit": "60284e11325846f5e3168ea5b31b9c998b725982",
+            "author": {
+              "name": "martins_rh",
+              "email": "martin.c.sumner@mac.com"
+            },
+            "committer": {
+              "name": "martins_rh",
+              "email": "martin.c.sumner@mac.com"
+            },
+            "message": "new throttler"
+          }
+        },
+        "strategy": {
+          "type": "Source",
+          "sourceStrategy": {
+            "from": {
+              "kind": "DockerImage",
+              "name": "registry.access.redhat.com/fuse7/fuse-java-openshift@sha256:b24ee848898b099e224acc2887754ac11ef9a5e40d02cdec3fc59cc30d7aa6a7"
+            }
+          }
+        },
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "throttler:latest"
+          },
+          "pushSecret": {
+            "name": "builder-dockercfg-2pptw"
+          }
+        },
+        "resources": {},
+        "postCommit": {},
+        "nodeSelector": null,
+        "triggeredBy": [
+          {
+            "message": "Image change",
+            "imageChangeBuild": {
+              "imageID": "registry.access.redhat.com/fuse7/fuse-java-openshift@sha256:b24ee848898b099e224acc2887754ac11ef9a5e40d02cdec3fc59cc30d7aa6a7",
+              "fromRef": {
+                "kind": "ImageStreamTag",
+                "namespace": "throttler",
+                "name": "fuse-java-openshift:latest"
+              }
+            }
+          }
+        ]
+      },
+      "status": {
+        "phase": "New",
+        "outputDockerImageReference": "docker-registry.default.svc:5000/throttler/throttler:latest",
+        "config": {
+          "name": "throttler"
+        },
+        "output": {
+          "to": {
+            "imageDigest": "sha256:7341f45eb1fe2d040ce5fb9e71e017e7c8c1ca38c532021b0beac80ffb0bb15d"
+          }
+        },
+        "stages": [
+          {
+            "name": "FetchInputs",
+            "startTime": "2018-07-19T12:26:55Z",
+            "durationMilliseconds": 4148,
+            "steps": [
+              {
+                "name": "FetchGitSource",
+                "startTime": "2018-07-19T12:26:55Z",
+                "durationMilliseconds": 4148
+              }
+            ]
+          },
+          {
+            "name": "CommitContainer",
+            "startTime": "2018-07-19T12:36:40Z",
+            "durationMilliseconds": 4379,
+            "steps": [
+              {
+                "name": "CommitContainer",
+                "startTime": "2018-07-19T12:36:40Z",
+                "durationMilliseconds": 4379
+              }
+            ]
+          },
+          {
+            "name": "Assemble",
+            "startTime": "2018-07-19T12:27:03Z",
+            "durationMilliseconds": 581173,
+            "steps": [
+              {
+                "name": "AssembleBuildScripts",
+                "startTime": "2018-07-19T12:27:03Z",
+                "durationMilliseconds": 581173
+              }
+            ]
+          },
+          {
+            "name": "PushImage",
+            "startTime": "2018-07-19T12:36:44Z",
+            "durationMilliseconds": 21714,
+            "steps": [
+              {
+                "name": "PushImage",
+                "startTime": "2018-07-19T12:36:44Z",
+                "durationMilliseconds": 21714
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "fuse-java-openshift",
+        "generation": 1,
+        "creationTimestamp": null,
+        "annotations": {
+          "openshift.io/image.dockerRepositoryCheck": "2018-07-19T12:26:19Z"
+        }
+      },
+      "spec": {
+        "lookupPolicy": {
+          "local": false
+        },
+        "tags": [
+          {
+            "name": "latest",
+            "annotations": null,
+            "from": {
+              "kind": "DockerImage",
+              "name": "docker-registry.default.svc:5000/throttler/fuse-java-openshift:latest"
+            },
+            "generation": 1,
+            "importPolicy": {},
+            "referencePolicy": {
+              "type": "Source"
+            }
+          }
+        ]
+      },
+      "status": {
+        "dockerImageRepository": ""
+      }
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "throttler",
+        "generation": 1,
+        "creationTimestamp": null,
+        "labels": {
+          "app": "throttler"
+        },
+        "annotations": {
+          "openshift.io/generated-by": "OpenShiftNewApp"
+        }
+      },
+      "spec": {
+        "lookupPolicy": {
+          "local": false
+        },
+        "tags": [
+          {
+            "name": "latest",
+            "annotations": null,
+            "from": {
+              "kind": "DockerImage",
+              "name": "docker-registry.default.svc:5000/throttler/throttler:latest"
+            },
+            "generation": null,
+            "importPolicy": {},
+            "referencePolicy": {
+              "type": ""
+            }
+          }
+        ]
+      },
+      "status": {
+        "dockerImageRepository": ""
+      }
+    },
+    {
+      "kind": "Pod",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "throttler-1-build",
+        "creationTimestamp": null,
+        "labels": {
+          "openshift.io/build.name": "throttler-1"
+        },
+        "annotations": {
+          "openshift.io/build.name": "throttler-1",
+          "openshift.io/scc": "privileged"
+        },
+        "ownerReferences": [
+          {
+            "apiVersion": "build.openshift.io/v1",
+            "kind": "Build",
+            "name": "throttler-1",
+            "uid": "032377e2-8b4f-11e8-bf90-5254007646f1",
+            "controller": true
+          }
+        ]
+      },
+      "spec": {
+        "volumes": [
+          {
+            "name": "buildworkdir",
+            "emptyDir": {}
+          },
+          {
+            "name": "docker-socket",
+            "hostPath": {
+              "path": "/var/run/docker.sock",
+              "type": ""
+            }
+          },
+          {
+            "name": "crio-socket",
+            "hostPath": {
+              "path": "/var/run/crio/crio.sock",
+              "type": ""
+            }
+          },
+          {
+            "name": "builder-dockercfg-2pptw-push",
+            "secret": {
+              "secretName": "builder-dockercfg-2pptw",
+              "defaultMode": 384
+            }
+          },
+          {
+            "name": "builder-token-blrvl",
+            "secret": {
+              "secretName": "builder-token-blrvl",
+              "defaultMode": 420
+            }
+          }
+        ],
+        "initContainers": [
+          {
+            "name": "git-clone",
+            "image": "registry.access.redhat.com/openshift3/ose-sti-builder:v3.9.31",
+            "command": [
+              "openshift-git-clone"
+            ],
+            "args": [
+              "--loglevel=0"
+            ],
+            "env": [
+              {
+                "name": "BUILD",
+                "value": "{\"kind\":\"Build\",\"apiVersion\":\"v1\",\"metadata\":{\"name\":\"throttler-1\",\"namespace\":\"throttler\",\"selfLink\":\"/apis/build.openshift.io/v1/namespaces/throttler/builds/throttler-1\",\"uid\":\"032377e2-8b4f-11e8-bf90-5254007646f1\",\"resourceVersion\":\"238254\",\"creationTimestamp\":\"2018-07-19T12:26:50Z\",\"labels\":{\"app\":\"throttler\",\"buildconfig\":\"throttler\",\"openshift.io/build-config.name\":\"throttler\",\"openshift.io/build.start-policy\":\"Serial\"},\"annotations\":{\"openshift.io/build-config.name\":\"throttler\",\"openshift.io/build.number\":\"1\"},\"ownerReferences\":[{\"apiVersion\":\"build.openshift.io/v1\",\"kind\":\"BuildConfig\",\"name\":\"throttler\",\"uid\":\"0317c8a0-8b4f-11e8-bf90-5254007646f1\",\"controller\":true}]},\"spec\":{\"serviceAccount\":\"builder\",\"source\":{\"type\":\"Git\",\"git\":{\"uri\":\"https://github.com/martincsumner/throttler.git\"}},\"strategy\":{\"type\":\"Source\",\"sourceStrategy\":{\"from\":{\"kind\":\"DockerImage\",\"name\":\"registry.access.redhat.com/fuse7/fuse-java-openshift@sha256:b24ee848898b099e224acc2887754ac11ef9a5e40d02cdec3fc59cc30d7aa6a7\"}}},\"output\":{\"to\":{\"kind\":\"DockerImage\",\"name\":\"docker-registry.default.svc:5000/throttler/throttler:latest\"},\"pushSecret\":{\"name\":\"builder-dockercfg-2pptw\"}},\"resources\":{},\"postCommit\":{},\"nodeSelector\":null,\"triggeredBy\":[{\"message\":\"Image change\",\"imageChangeBuild\":{\"imageID\":\"registry.access.redhat.com/fuse7/fuse-java-openshift@sha256:b24ee848898b099e224acc2887754ac11ef9a5e40d02cdec3fc59cc30d7aa6a7\",\"fromRef\":{\"kind\":\"ImageStreamTag\",\"namespace\":\"throttler\",\"name\":\"fuse-java-openshift:latest\"}}}]},\"status\":{\"phase\":\"New\",\"outputDockerImageReference\":\"docker-registry.default.svc:5000/throttler/throttler:latest\",\"config\":{\"kind\":\"BuildConfig\",\"namespace\":\"throttler\",\"name\":\"throttler\"},\"output\":{}}}\n"
+              },
+              {
+                "name": "SOURCE_REPOSITORY",
+                "value": "https://github.com/martincsumner/throttler.git"
+              },
+              {
+                "name": "SOURCE_URI",
+                "value": "https://github.com/martincsumner/throttler.git"
+              },
+              {
+                "name": "ORIGIN_VERSION",
+                "value": "v3.9.31"
+              },
+              {
+                "name": "ALLOWED_UIDS",
+                "value": "1-"
+              },
+              {
+                "name": "DROP_CAPS",
+                "value": "KILL,MKNOD,SETGID,SETUID"
+              }
+            ],
+            "resources": {},
+            "volumeMounts": [
+              {
+                "name": "buildworkdir",
+                "mountPath": "/tmp/build"
+              },
+              {
+                "name": "builder-token-blrvl",
+                "readOnly": true,
+                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount"
+              }
+            ],
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "FallbackToLogsOnError",
+            "imagePullPolicy": "IfNotPresent"
+          },
+          {
+            "name": "manage-dockerfile",
+            "image": "registry.access.redhat.com/openshift3/ose-sti-builder:v3.9.31",
+            "command": [
+              "openshift-manage-dockerfile"
+            ],
+            "args": [
+              "--loglevel=0"
+            ],
+            "env": [
+              {
+                "name": "BUILD",
+                "value": "{\"kind\":\"Build\",\"apiVersion\":\"v1\",\"metadata\":{\"name\":\"throttler-1\",\"namespace\":\"throttler\",\"selfLink\":\"/apis/build.openshift.io/v1/namespaces/throttler/builds/throttler-1\",\"uid\":\"032377e2-8b4f-11e8-bf90-5254007646f1\",\"resourceVersion\":\"238254\",\"creationTimestamp\":\"2018-07-19T12:26:50Z\",\"labels\":{\"app\":\"throttler\",\"buildconfig\":\"throttler\",\"openshift.io/build-config.name\":\"throttler\",\"openshift.io/build.start-policy\":\"Serial\"},\"annotations\":{\"openshift.io/build-config.name\":\"throttler\",\"openshift.io/build.number\":\"1\"},\"ownerReferences\":[{\"apiVersion\":\"build.openshift.io/v1\",\"kind\":\"BuildConfig\",\"name\":\"throttler\",\"uid\":\"0317c8a0-8b4f-11e8-bf90-5254007646f1\",\"controller\":true}]},\"spec\":{\"serviceAccount\":\"builder\",\"source\":{\"type\":\"Git\",\"git\":{\"uri\":\"https://github.com/martincsumner/throttler.git\"}},\"strategy\":{\"type\":\"Source\",\"sourceStrategy\":{\"from\":{\"kind\":\"DockerImage\",\"name\":\"registry.access.redhat.com/fuse7/fuse-java-openshift@sha256:b24ee848898b099e224acc2887754ac11ef9a5e40d02cdec3fc59cc30d7aa6a7\"}}},\"output\":{\"to\":{\"kind\":\"DockerImage\",\"name\":\"docker-registry.default.svc:5000/throttler/throttler:latest\"},\"pushSecret\":{\"name\":\"builder-dockercfg-2pptw\"}},\"resources\":{},\"postCommit\":{},\"nodeSelector\":null,\"triggeredBy\":[{\"message\":\"Image change\",\"imageChangeBuild\":{\"imageID\":\"registry.access.redhat.com/fuse7/fuse-java-openshift@sha256:b24ee848898b099e224acc2887754ac11ef9a5e40d02cdec3fc59cc30d7aa6a7\",\"fromRef\":{\"kind\":\"ImageStreamTag\",\"namespace\":\"throttler\",\"name\":\"fuse-java-openshift:latest\"}}}]},\"status\":{\"phase\":\"New\",\"outputDockerImageReference\":\"docker-registry.default.svc:5000/throttler/throttler:latest\",\"config\":{\"kind\":\"BuildConfig\",\"namespace\":\"throttler\",\"name\":\"throttler\"},\"output\":{}}}\n"
+              },
+              {
+                "name": "SOURCE_REPOSITORY",
+                "value": "https://github.com/martincsumner/throttler.git"
+              },
+              {
+                "name": "SOURCE_URI",
+                "value": "https://github.com/martincsumner/throttler.git"
+              },
+              {
+                "name": "ORIGIN_VERSION",
+                "value": "v3.9.31"
+              },
+              {
+                "name": "ALLOWED_UIDS",
+                "value": "1-"
+              },
+              {
+                "name": "DROP_CAPS",
+                "value": "KILL,MKNOD,SETGID,SETUID"
+              }
+            ],
+            "resources": {},
+            "volumeMounts": [
+              {
+                "name": "buildworkdir",
+                "mountPath": "/tmp/build"
+              },
+              {
+                "name": "builder-token-blrvl",
+                "readOnly": true,
+                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount"
+              }
+            ],
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "FallbackToLogsOnError",
+            "imagePullPolicy": "IfNotPresent"
+          }
+        ],
+        "containers": [
+          {
+            "name": "sti-build",
+            "image": "registry.access.redhat.com/openshift3/ose-sti-builder:v3.9.31",
+            "command": [
+              "openshift-sti-build"
+            ],
+            "args": [
+              "--loglevel=0"
+            ],
+            "env": [
+              {
+                "name": "BUILD",
+                "value": "{\"kind\":\"Build\",\"apiVersion\":\"v1\",\"metadata\":{\"name\":\"throttler-1\",\"namespace\":\"throttler\",\"selfLink\":\"/apis/build.openshift.io/v1/namespaces/throttler/builds/throttler-1\",\"uid\":\"032377e2-8b4f-11e8-bf90-5254007646f1\",\"resourceVersion\":\"238254\",\"creationTimestamp\":\"2018-07-19T12:26:50Z\",\"labels\":{\"app\":\"throttler\",\"buildconfig\":\"throttler\",\"openshift.io/build-config.name\":\"throttler\",\"openshift.io/build.start-policy\":\"Serial\"},\"annotations\":{\"openshift.io/build-config.name\":\"throttler\",\"openshift.io/build.number\":\"1\"},\"ownerReferences\":[{\"apiVersion\":\"build.openshift.io/v1\",\"kind\":\"BuildConfig\",\"name\":\"throttler\",\"uid\":\"0317c8a0-8b4f-11e8-bf90-5254007646f1\",\"controller\":true}]},\"spec\":{\"serviceAccount\":\"builder\",\"source\":{\"type\":\"Git\",\"git\":{\"uri\":\"https://github.com/martincsumner/throttler.git\"}},\"strategy\":{\"type\":\"Source\",\"sourceStrategy\":{\"from\":{\"kind\":\"DockerImage\",\"name\":\"registry.access.redhat.com/fuse7/fuse-java-openshift@sha256:b24ee848898b099e224acc2887754ac11ef9a5e40d02cdec3fc59cc30d7aa6a7\"}}},\"output\":{\"to\":{\"kind\":\"DockerImage\",\"name\":\"docker-registry.default.svc:5000/throttler/throttler:latest\"},\"pushSecret\":{\"name\":\"builder-dockercfg-2pptw\"}},\"resources\":{},\"postCommit\":{},\"nodeSelector\":null,\"triggeredBy\":[{\"message\":\"Image change\",\"imageChangeBuild\":{\"imageID\":\"registry.access.redhat.com/fuse7/fuse-java-openshift@sha256:b24ee848898b099e224acc2887754ac11ef9a5e40d02cdec3fc59cc30d7aa6a7\",\"fromRef\":{\"kind\":\"ImageStreamTag\",\"namespace\":\"throttler\",\"name\":\"fuse-java-openshift:latest\"}}}]},\"status\":{\"phase\":\"New\",\"outputDockerImageReference\":\"docker-registry.default.svc:5000/throttler/throttler:latest\",\"config\":{\"kind\":\"BuildConfig\",\"namespace\":\"throttler\",\"name\":\"throttler\"},\"output\":{}}}\n"
+              },
+              {
+                "name": "SOURCE_REPOSITORY",
+                "value": "https://github.com/martincsumner/throttler.git"
+              },
+              {
+                "name": "SOURCE_URI",
+                "value": "https://github.com/martincsumner/throttler.git"
+              },
+              {
+                "name": "ORIGIN_VERSION",
+                "value": "v3.9.31"
+              },
+              {
+                "name": "ALLOWED_UIDS",
+                "value": "1-"
+              },
+              {
+                "name": "DROP_CAPS",
+                "value": "KILL,MKNOD,SETGID,SETUID"
+              },
+              {
+                "name": "PUSH_DOCKERCFG_PATH",
+                "value": "/var/run/secrets/openshift.io/push"
+              }
+            ],
+            "resources": {},
+            "volumeMounts": [
+              {
+                "name": "buildworkdir",
+                "mountPath": "/tmp/build"
+              },
+              {
+                "name": "docker-socket",
+                "mountPath": "/var/run/docker.sock"
+              },
+              {
+                "name": "crio-socket",
+                "mountPath": "/var/run/crio/crio.sock"
+              },
+              {
+                "name": "builder-dockercfg-2pptw-push",
+                "readOnly": true,
+                "mountPath": "/var/run/secrets/openshift.io/push"
+              },
+              {
+                "name": "builder-token-blrvl",
+                "readOnly": true,
+                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount"
+              }
+            ],
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "FallbackToLogsOnError",
+            "imagePullPolicy": "IfNotPresent",
+            "securityContext": {
+              "privileged": true
+            }
+          }
+        ],
+        "restartPolicy": "Never",
+        "terminationGracePeriodSeconds": 30,
+        "dnsPolicy": "ClusterFirst",
+        "nodeSelector": {
+          "node-role.kubernetes.io/compute": "true"
+        },
+        "serviceAccountName": "builder",
+        "serviceAccount": "builder",
+        "nodeName": "3scale1.project.local",
+        "securityContext": {},
+        "imagePullSecrets": [
+          {
+            "name": "builder-dockercfg-2pptw"
+          }
+        ],
+        "schedulerName": "default-scheduler"
+      },
+      "status": {
+        "phase": "Pending",
+        "qosClass": "BestEffort"
+      }
+    },
+    {
+      "kind": "Pod",
+      "apiVersion": "v1",
+      "metadata": {
+        "generateName": "throttler-1-",
+        "creationTimestamp": null,
+        "labels": {
+          "app": "throttler",
+          "deployment": "throttler-1",
+          "deploymentconfig": "throttler"
+        },
+        "annotations": {
+          "openshift.io/deployment-config.latest-version": "1",
+          "openshift.io/deployment-config.name": "throttler",
+          "openshift.io/deployment.name": "throttler-1",
+          "openshift.io/generated-by": "OpenShiftNewApp",
+          "openshift.io/scc": "anyuid"
+        },
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "kind": "ReplicationController",
+            "name": "throttler-1",
+            "uid": "722a0cdb-8b50-11e8-bf90-5254007646f1",
+            "controller": true,
+            "blockOwnerDeletion": true
+          }
+        ]
+      },
+      "spec": {
+        "volumes": [
+          {
+            "name": "default-token-grz56",
+            "secret": {
+              "secretName": "default-token-grz56",
+              "defaultMode": 420
+            }
+          }
+        ],
+        "containers": [
+          {
+            "name": "throttler",
+            "image": "docker-registry.default.svc:5000/throttler/throttler@sha256:7341f45eb1fe2d040ce5fb9e71e017e7c8c1ca38c532021b0beac80ffb0bb15d",
+            "ports": [
+              {
+                "containerPort": 8778,
+                "protocol": "TCP"
+              },
+              {
+                "containerPort": 9779,
+                "protocol": "TCP"
+              }
+            ],
+            "resources": {},
+            "volumeMounts": [
+              {
+                "name": "default-token-grz56",
+                "readOnly": true,
+                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount"
+              }
+            ],
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "imagePullPolicy": "Always",
+            "securityContext": {
+              "capabilities": {
+                "drop": [
+                  "MKNOD"
+                ]
+              }
+            }
+          }
+        ],
+        "restartPolicy": "Always",
+        "terminationGracePeriodSeconds": 30,
+        "dnsPolicy": "ClusterFirst",
+        "nodeSelector": {
+          "node-role.kubernetes.io/compute": "true"
+        },
+        "serviceAccountName": "default",
+        "serviceAccount": "default",
+        "nodeName": "3scale1.project.local",
+        "securityContext": {
+          "seLinuxOptions": {
+            "level": "s0:c12,c4"
+          }
+        },
+        "imagePullSecrets": [
+          {
+            "name": "default-dockercfg-5fbrt"
+          }
+        ],
+        "schedulerName": "default-scheduler"
+      },
+      "status": {
+        "phase": "Pending",
+        "qosClass": "BestEffort"
+      }
+    },
+    {
+      "kind": "ReplicationController",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "throttler-1",
+        "generation": 1,
+        "creationTimestamp": null,
+        "labels": {
+          "app": "throttler",
+          "openshift.io/deployment-config.name": "throttler"
+        },
+        "annotations": {
+          "openshift.io/deployer-pod.completed-at": "2018-07-19 13:37:12 +0100 BST",
+          "openshift.io/deployer-pod.created-at": "2018-07-19 13:37:06 +0100 BST",
+          "openshift.io/deployer-pod.name": "throttler-1-deploy",
+          "openshift.io/deployment-config.latest-version": "1",
+          "openshift.io/deployment-config.name": "throttler",
+          "openshift.io/deployment.phase": "Complete",
+          "openshift.io/deployment.replicas": "1",
+          "openshift.io/deployment.status-reason": "config change",
+          "openshift.io/encoded-deployment-config": "{\"kind\":\"DeploymentConfig\",\"apiVersion\":\"v1\",\"metadata\":{\"name\":\"throttler\",\"namespace\":\"throttler\",\"selfLink\":\"/apis/apps.openshift.io/v1/namespaces/throttler/deploymentconfigs/throttler\",\"uid\":\"031aa5e1-8b4f-11e8-bf90-5254007646f1\",\"resourceVersion\":\"239453\",\"generation\":2,\"creationTimestamp\":\"2018-07-19T12:26:50Z\",\"labels\":{\"app\":\"throttler\"},\"annotations\":{\"openshift.io/generated-by\":\"OpenShiftNewApp\"}},\"spec\":{\"strategy\":{\"type\":\"Rolling\",\"rollingParams\":{\"updatePeriodSeconds\":1,\"intervalSeconds\":1,\"timeoutSeconds\":600,\"maxUnavailable\":\"25%\",\"maxSurge\":\"25%\"},\"resources\":{},\"activeDeadlineSeconds\":21600},\"triggers\":[{\"type\":\"ConfigChange\"},{\"type\":\"ImageChange\",\"imageChangeParams\":{\"automatic\":true,\"containerNames\":[\"throttler\"],\"from\":{\"kind\":\"ImageStreamTag\",\"namespace\":\"throttler\",\"name\":\"throttler:latest\"},\"lastTriggeredImage\":\"docker-registry.default.svc:5000/throttler/throttler@sha256:7341f45eb1fe2d040ce5fb9e71e017e7c8c1ca38c532021b0beac80ffb0bb15d\"}}],\"replicas\":1,\"revisionHistoryLimit\":10,\"test\":false,\"selector\":{\"app\":\"throttler\",\"deploymentconfig\":\"throttler\"},\"template\":{\"metadata\":{\"creationTimestamp\":null,\"labels\":{\"app\":\"throttler\",\"deploymentconfig\":\"throttler\"},\"annotations\":{\"openshift.io/generated-by\":\"OpenShiftNewApp\"}},\"spec\":{\"containers\":[{\"name\":\"throttler\",\"image\":\"docker-registry.default.svc:5000/throttler/throttler@sha256:7341f45eb1fe2d040ce5fb9e71e017e7c8c1ca38c532021b0beac80ffb0bb15d\",\"ports\":[{\"containerPort\":8778,\"protocol\":\"TCP\"},{\"containerPort\":9779,\"protocol\":\"TCP\"}],\"resources\":{},\"terminationMessagePath\":\"/dev/termination-log\",\"terminationMessagePolicy\":\"File\",\"imagePullPolicy\":\"Always\"}],\"restartPolicy\":\"Always\",\"terminationGracePeriodSeconds\":30,\"dnsPolicy\":\"ClusterFirst\",\"securityContext\":{},\"schedulerName\":\"default-scheduler\"}}},\"status\":{\"latestVersion\":1,\"observedGeneration\":1,\"replicas\":0,\"updatedReplicas\":0,\"availableReplicas\":0,\"unavailableReplicas\":0,\"details\":{\"message\":\"config change\",\"causes\":[{\"type\":\"ConfigChange\"}]},\"conditions\":[{\"type\":\"Available\",\"status\":\"False\",\"lastUpdateTime\":\"2018-07-19T12:26:50Z\",\"lastTransitionTime\":\"2018-07-19T12:26:50Z\",\"message\":\"Deployment config does not have minimum availability.\"}]}}\n"
+        },
+        "ownerReferences": [
+          {
+            "apiVersion": "apps.openshift.io/v1",
+            "kind": "DeploymentConfig",
+            "name": "throttler",
+            "uid": "031aa5e1-8b4f-11e8-bf90-5254007646f1",
+            "controller": true,
+            "blockOwnerDeletion": true
+          }
+        ]
+      },
+      "spec": {
+        "replicas": 1,
+        "selector": {
+          "app": "throttler",
+          "deployment": "throttler-1",
+          "deploymentconfig": "throttler"
+        },
+        "template": {
+          "metadata": {
+            "creationTimestamp": null,
+            "labels": {
+              "app": "throttler",
+              "deployment": "throttler-1",
+              "deploymentconfig": "throttler"
+            },
+            "annotations": {
+              "openshift.io/deployment-config.latest-version": "1",
+              "openshift.io/deployment-config.name": "throttler",
+              "openshift.io/deployment.name": "throttler-1",
+              "openshift.io/generated-by": "OpenShiftNewApp"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "name": "throttler",
+                "image": "docker-registry.default.svc:5000/throttler/throttler@sha256:7341f45eb1fe2d040ce5fb9e71e017e7c8c1ca38c532021b0beac80ffb0bb15d",
+                "ports": [
+                  {
+                    "containerPort": 8778,
+                    "protocol": "TCP"
+                  },
+                  {
+                    "containerPort": 9779,
+                    "protocol": "TCP"
+                  }
+                ],
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "imagePullPolicy": "Always"
+              }
+            ],
+            "restartPolicy": "Always",
+            "terminationGracePeriodSeconds": 30,
+            "dnsPolicy": "ClusterFirst",
+            "securityContext": {},
+            "schedulerName": "default-scheduler"
+          }
+        }
+      },
+      "status": {
+        "replicas": 0
+      }
+    },
+    {
+      "kind": "Service",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "throttler",
+        "creationTimestamp": null,
+        "labels": {
+          "app": "throttler"
+        },
+        "annotations": {
+          "openshift.io/generated-by": "OpenShiftNewApp"
+        }
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "8778-tcp",
+            "protocol": "TCP",
+            "port": 8778,
+            "targetPort": 8778
+          },
+          {
+            "name": "9779-tcp",
+            "protocol": "TCP",
+            "port": 9779,
+            "targetPort": 9779
+          }
+        ],
+        "selector": {
+          "app": "throttler",
+          "deploymentconfig": "throttler"
+        },
+        "type": "ClusterIP",
+        "sessionAffinity": "None"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    }
+  ]
+}
